@@ -95,4 +95,29 @@ class OrderController extends Controller
             return response()->json(['verified' => false]);
         }
     }
+
+    public function updateStatus(Request $request, $uuid): JsonResponse
+    {
+        // Validasi input
+        $validated = $request->validate([
+            'shipper' => 'required|string|max:255',
+            'status' => 'required|string|max:50',
+        ]);
+
+        // Mengupdate status
+        $order = Order::where('uuid', $uuid)->first();
+
+        if (!$order) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        $order->status = $validated['status'];
+        $order->shipper = 'delivered';
+
+        if ($order->save()) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['error' => 'Failed to update status'], 500);
+        }
+    }
 }

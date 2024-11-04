@@ -27,3 +27,4 @@ Route::post('/rfid/register', [RFIDController::class, 'registerOrUpdate']);
 Route::get('/rfid', [RFIDController::class, 'getUserById']);
 
 Route::get('/verify-ktp/{ktpNumber}', [OrderController::class, 'verifyKTP']);
+Route::post('/orders/{uuid}/status', [OrderController::class, 'updateStatus']);
