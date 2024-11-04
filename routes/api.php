@@ -25,3 +25,5 @@ Route::get('/orders/shipper', [OrderController::class, 'getOrdersByShipper']);
 // RFID routes can also be added here
 Route::post('/rfid/register', [RFIDController::class, 'registerOrUpdate']);
 Route::get('/rfid', [RFIDController::class, 'getUserById']);
+
+Route::get('/verify-ktp/{ktpNumber}', [OrderController::class, 'verifyKTP']);

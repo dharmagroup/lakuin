@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RFID;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Str;
-
+use Illuminate\Http\JsonResponse;
 class OrderController extends Controller
 {
     public function createOrder(Request $request)
@@ -67,16 +68,31 @@ class OrderController extends Controller
     {
         // Validate the incoming request
         $request->validate([
-            'userId' => 'required|string',
+            'uuid' => 'required|string',
         ]);
 
         // Retrieve the userId (shipper) from the request
-        $shipperId = $request->input('userId');
+        $shipperId = $request->input('uuid');
 
         // Fetch orders associated with the shipper
-        $orders = Order::where('shipper', $shipperId)->get();
+        $orders = Order::where('uuid', $shipperId)->first();
 
         // Return the orders in JSON format
         return response()->json($orders);
+    }
+
+    public function verifyKTP($ktpNumber): JsonResponse
+    {
+        // Mengambil data dari tabel ktp_verification
+        $data = RFID::
+            where('ktp_no', $ktpNumber)
+            ->first();
+
+        // Memeriksa apakah data ditemukan
+        if ($data) {
+            return response()->json(['verified' => true]);
+        } else {
+            return response()->json(['verified' => false]);
+        }
     }
 }
