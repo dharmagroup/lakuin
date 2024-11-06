@@ -111,8 +111,8 @@ class OrderController extends Controller
             return response()->json(['error' => 'Order not found'], 404);
         }
 
-        $order->status = $validated['status'];
-        $order->shipper = 'delivered';
+        $order->status = 'delivered';
+        $order->shipper = $request->input('shipper');
 
         if ($order->save()) {
             return response()->json(['success' => true]);
